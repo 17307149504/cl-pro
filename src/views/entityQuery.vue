@@ -1,8 +1,10 @@
 <template>
   <div>
-     <search placeHolder="请输入病情等信息"></search>
-     <h3>知识图谱关系图</h3>
-      <my-relationmap></my-relationmap>
+     <search placeHolder="请输入实体名"></search>
+     <div v-show="mapData.flag">
+      <h3>知识图谱关系图</h3>
+      <my-relationmap :data="mapData.data"></my-relationmap>
+      </div>
   </div>
 </template>
 
@@ -13,6 +15,17 @@ export default {
 components:{
   search,
   'my-relationmap': relationmap
+},
+data() {
+  return {
+    mapData: {
+      flag: false,
+      data: {
+        nodes: [],
+        edges: []
+      }
+    }
+  }
 }
 }
 </script>

@@ -1,0 +1,205 @@
+@C1: #666;
+@C2: #d3d3d3;
+
+.login_box {
+    padding-top: 20px;
+    font-size: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    box-sizing: border-box;
+    color: #666;
+
+    .header,
+    .main,
+    .register,
+    .other {
+        margin: 0 auto;
+        width: 75%;
+    }
+
+    .header {
+        margin-bottom: 30px;
+
+        h4 {
+            line-height: 20px;
+            font-size: 25px;
+            text-align: center;
+            font-weight: normal;
+        }
+    }
+
+    .main {
+        .inpBox {
+            position: relative;
+            font-size: 16px;
+            height: 50px;
+            border-bottom: 1px solid @C2;
+
+            input {
+                border: none;
+                width: 100%;
+                height: 45px;
+
+                &.short {
+                    width: 60%;
+                    position: absolute;
+                    left: 0;
+                }
+            }
+
+            a {
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #c49c63;
+
+                &.noClick {
+                    color: @C1;
+                }
+            }
+        }
+
+        .submit {
+            display: block;
+            margin-top: 20px;
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 18px;
+            color: #fff;
+            border: none;
+            border-radius: 40px;
+            background: linear-gradient(to right, #e4bb7e, #d1a96e);
+            box-shadow: 0px 3px 2px 0px@C2;
+        }
+
+        .changeBtn {
+
+            width: 100%;
+            line-height: 40px;
+            height: 40px;
+            margin-top: 10px;
+            border-radius: 40px;
+            background: #eee;
+            display: inline-block;
+            color: @C1;
+        }
+    }
+
+    .register {
+        line-height: 60px;
+        font-size: 15px;
+        text-align: center;
+
+        a {
+            padding: 0 0.2rem;
+            color: @C1;
+        }
+    }
+
+    .other {
+        margin-top: 0.4rem;
+
+        span {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+            color: @C1;
+
+            &:before,
+            &:after {
+                content: "";
+                height: 0;
+                width: 20%;
+                border: 0.01rem solid @C2;
+            }
+        }
+
+        div {
+            margin-top: 0.3rem;
+            text-align: center;
+            font-size: 20px;
+
+            a {
+                display: inline-block;
+                margin: 0 0.15rem;
+                width: 35px;
+                height: 35px;
+                line-height: 35px;
+                border-radius: 50%;
+                color: #fff;
+                font-size: 20px;
+
+                &:nth-child(1) {
+                    background-color: #ed9090;
+                }
+
+                &:nth-child(2) {
+                    background-color: #6bb6ea;
+                }
+
+                &:nth-child(3) {
+                    background-color: #00be00;
+                }
+            }
+        }
+    }
+
+    .footer {
+        margin-top: 0.8rem;
+        line-height: 0.5rem;
+        text-align: center;
+        color: @C1;
+
+        span {
+            margin: 0 0.15rem;
+        }
+    }
+}
+.login_form {
+    max-width: 600px;
+    min-height: 400px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 80px 50px 40px;
+    margin: 60px auto 0;
+    position: relative;
+    h4 {
+        text-align: center;
+        font-size: 1.25em;
+    }
+    .form_tab{
+        position: absolute;
+        top: 15px;
+        left:35px;
+    }
+    .el-input {
+        width: 60%;
+    }
+    .validate_number {
+        position: absolute;
+        right: 20px;
+        color: #c49c63;
+        cursor: pointer
+    }
+
+    .validate_item {
+        position: relative;
+    }
+
+    .message_login_btn {
+        background-color: #eee;
+        margin-top: 20px;
+        margin-left: 0;
+    }
+    .el-button {
+        width: 60%;
+        margin-top: 20px;
+    }
+}
+

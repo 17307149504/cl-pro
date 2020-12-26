@@ -46,4 +46,11 @@ ul,li {
 li {
     line-height: 2em;
 }
+.map-box {
+    min-height: 300px;
+    /* background-color: pink; */
+    width: 100%;
+    border: 1px solid #ccc;
+    margin: 20px;
+}
 </style>
