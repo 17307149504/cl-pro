@@ -49,9 +49,9 @@ const routes = [
                 ]
             },
             {
-                path: '/instructionsForUse',
-                name: 'instructionsForUse',
-                component: () => import('../views/instructionsForUse.vue')
+                path: '/admissions', 
+                name: 'admissions',
+                component: () => import('../views/admissions.vue')
             },
             {
                 path: '/entityQuery',

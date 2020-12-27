@@ -12,7 +12,7 @@
     <el-menu-item v-if="isDoctor || isAdmin" index="/startDiagnosis">开始诊断</el-menu-item>
     <el-menu-item index="/knowledgePopularization">知识科普</el-menu-item>
     <el-menu-item index="/entityQuery">实体查询</el-menu-item>
-    <el-menu-item index="/instructionsForUse">使用说明</el-menu-item>
+    <el-menu-item index="/admissions" v-if="isDoctor || isAdmin">我的接诊</el-menu-item>
     <el-menu-item v-show="isAuthenticated" style="float:right">
       <div class="text" @click="logout">退出登录</div>
     </el-menu-item>

@@ -9,7 +9,10 @@ export default new Vuex.Store({
             sex: '',
             age: '',
             occupation: ''
-        }
+        },
+        afterCheck: false,
+        // 需要记住点击的患者的id，之后再次进行数据库的搜索得到患者的基本信息，症状信息，并且放到页面中。
+        patientId: '',
     },
     getters: {
         isAuthenticated: (state) => {
@@ -32,6 +35,9 @@ export default new Vuex.Store({
         changeUserIdentify(state, option) {
             state.userIdentify = option;
         },
+        changeAfterCheck(state, value) {
+            state.afterCheck = value;
+        }
     },
     actions: {
     },

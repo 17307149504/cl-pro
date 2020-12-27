@@ -13,6 +13,7 @@
             placeholder="请输入职业"
             v-model="formData.occupation"
             class="input-with-select"
+            style="width:150px"
           >
             <el-select
               v-model="formData.sex"
@@ -50,21 +51,26 @@
           <el-tag v-for="(item, key) in tagsArr" :key="key">{{ item }}</el-tag>
         </div>
         <el-input
-          v-model="symptomStr"
+          v-model="formData.symptomStr"
           placeholder="请输入症状"
           class="symptom-input"
         ></el-input>
         <el-button type="primary" @click="getChecks">
           解析
         </el-button>
-        <div v-show="cGrade.length != 0" class="check-box">
-          <h4>初步诊断，该症状属于{{cGrade}}等级，需做以下检查</h4>
+        <div v-show="formData.cGrade.length != 0" class="check-box">
+          <h4>初步诊断，该症状属于{{formData.cGrade}}等级，需做以下检查</h4>
           <span
-            v-for="check in needChecks"
+            v-for="check in formData.needChecks"
             :key="check.name"
             class="check-span"
             >{{ check.name }}</span
           >
+          <h4>可先保存至我的接诊，等待检查结果出来之后再继续，这需要提供患者的就诊卡号方便您后续操作</h4>
+          <div style="height: 100px">
+          <el-input placeholder="请输入患者的就诊卡号" v-model="formData.id_number" style="float: left;width: 300px"></el-input>
+          <el-button type="primary" style="float: left;" @click="saveInfo">保存</el-button>
+          </div>
         </div>
         
       </div>
@@ -84,7 +90,7 @@
                 <span>反流位置：</span>
                 <div class="inner-box">
                   <!-- <span v-for="(item, index) in prPositionArr" :key="index"> {{item}}</span> -->
-                  <el-tag v-for="(tag,index) in prPositionArr" :key="index" closable @close="delPrPosition">
+                  <el-tag v-for="(tag,index) in step3Form.prPositionArr" :key="index" closable @close="delPrPosition">
                     {{ tag }}
                   </el-tag>
                 </div>
@@ -115,7 +121,7 @@
                 <span>阻塞位置：</span>
                 <div class="inner-box">
                   <!-- <span v-for="(item, index) in prPositionArr" :key="index"> {{item}}</span> -->
-                  <el-tag v-for="(tag,index) in poPositionArr" :key="index" closable @close="delPoPosition">
+                  <el-tag v-for="(tag,index) in step3Form.poPositionArr" :key="index" closable @close="delPoPosition">
                     {{ tag }}
                   </el-tag>
                 </div>
@@ -201,15 +207,15 @@
       </div>
     </div>
     <el-dialog title="导入电子病历" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
+      <el-form :model="formData">
         <el-form-item label="病人就诊卡号" label-width="200px">
-          <el-input v-model="form.cardNumber" autocomplete="off"></el-input>
+          <el-input v-model="formData.id_number" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="病人姓名" label-width="200px">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+          <el-input v-model="formData.name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="就诊科室" label-width="200px">
-          <el-input v-model="form.department" autocomplete="off"></el-input>
+          <el-input v-model="formData.department" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -238,26 +244,28 @@ export default {
           reason: "因工作需要长期站立",
           treatmentMethod: "穿戴静脉曲张袜,每天早上起床前穿戴弹力袜，持续穿戴时间为8-12小时，夜间休息时脱下，不建议穿着弹力袜入睡。",
         },
-        {
-          recommended: 5,
-          name: 'C23EAP',
-          reason: "因工作需要长期站立",
-          treatmentMethod: "穿戴静脉曲张袜,每天早上起床前穿戴弹力袜，持续穿戴时间为8-12小时，夜间休息时脱下，不建议穿着弹力袜入睡。",
-        },
       ],
       dialogFormVisible: false,
       activeStep: 0,
       ageOptions,
-      symptomStr: "",
-      cGrade: '',
-      formData: {
+      formData: {// 需要保存的之后需要自动显示的信息
         sex: "",
         age: "",
         occupation: "",
-      },
-      form: {
-        //导入电子病历时需要提供的信息
-        cardNumber: "",
+        symptomStr: "",
+        cGrade: '',
+        needChecks: [
+        {
+          name: "大隐静脉瓣膜功能试验",
+        },
+        {
+          name: "深静脉通畅试验",
+        },
+        {
+          name: "彩色多普勒超声检查",
+        },
+        ],
+        cardNumber: null,//导入电子病历时需要提供的信息
         name: "",
         department: "",
       },
@@ -276,25 +284,12 @@ export default {
         "皮下组织纤维化",
         "皮肤溃疡",
       ],
-      needChecks: [
-        {
-          name: "大隐静脉瓣膜功能试验",
-        },
-        {
-          name: "深静脉通畅试验",
-        },
-        {
-          name: "彩色多普勒超声检查",
-        },
-      ],
       step3Form: {
         p: "",
-        pr: "",
-        po: "",
         e: "",
+        prPositionArr: [],
+        poPositionArr: []
       },
-      prPositionArr: [],
-      poPositionArr: []
     };
   },
   computed: {
@@ -323,7 +318,7 @@ export default {
         },
         {
           title: 'C',
-          content: this.cGrade
+          content: this.formData.cGrade
         },
         {
           title: 'E',
@@ -331,7 +326,7 @@ export default {
         },
         {
           title: 'A',
-          content: `反流部位：${this.poPositionArr.length > 0? this.poPositionArr.join('、') : '无'}; 阻塞部位：${this.poPositionArr.length > 0 ? this.poPositionArr.join('、') : '无'}`
+          content: `反流部位：${this.step3Form.poPositionArr.length > 0? this.step3Form.poPositionArr.join('、') : '无'}; 阻塞部位：${this.step3Form.poPositionArr.length > 0 ? this.poPositionArr.join('、') : '无'}`
         },
         {
           title: 'P',
@@ -341,9 +336,23 @@ export default {
     }
   },
   methods: {
+    saveInfo() {
+      // 将当前输入的所有信息保存到数据库中
+      // 当前所有数据刷新，并且返回第一步，我的接诊页面刷新，增加一条，点击某条数据会返回步骤二，并且获得所有的保存的信息
+      // 标识是就诊卡号
+      // 若未提供就诊卡号，就需要输入就诊卡号
+      if(!this.formData.id_number) {
+        this.$message({
+          message: '需要提供患者的就诊卡号进行保存。',
+          type: 'warning'
+        });
+        return;
+      }
+      this.$router.replace('/admissions');
+    },
     getChecks() {
       // 根据当前的症状输入和基本信息获取到需要做的检查以及C的等级
-      this.cGrade = 'C3';
+      this.formData.cGrade = 'C3';
     },
     handleEdit(index, row) {
         console.log(index, row);
@@ -376,7 +385,7 @@ export default {
     getInput(e) {
       let target = e.target;
       if (target.localName === "span") {
-        this.symptomStr += " " + target.innerText;
+        this.formData.symptomStr += " " + target.innerText;
       }
     },
     getPrPosition(e) {
@@ -384,14 +393,14 @@ export default {
       let target = e.target;
       if(target.localName === 'span') {
         let text = target.innerText.trim();
-        if(this.prPositionArr.indexOf(text) == -1)this.prPositionArr.push(text);
+        if(this.step3Form.prPositionArr.indexOf(text) == -1)this.step3Form.prPositionArr.push(text);
       }
     },
     delPrPosition(e) {
       let target = e.target;
       if(target.localName === 'i') {
         let text = target.previousSibling.nodeValue.trim();
-        this.prPositionArr = this.prPositionArr.filter(
+        this.step3Form.prPositionArr = this.step3Form.prPositionArr.filter(
           item => item !== text
         )
       }
@@ -400,7 +409,7 @@ export default {
       let target = e.target;
       if(target.localName === 'i') {
         let text = target.previousSibling.nodeValue.trim();
-        this.poPositionArr = this.poPositionArr.filter(
+        this.step3Form.poPositionArr = this.step3Form.poPositionArr.filter(
           item => item !== text
         )
       }
@@ -410,7 +419,7 @@ export default {
       let target = e.target;
        if(target.localName === 'span') {
         let text = target.innerText.trim();
-        if(this.poPositionArr.indexOf(text) == -1)this.poPositionArr.push(text);
+        if(this.step3Form.poPositionArr.indexOf(text) == -1)this.step3Form.poPositionArr.push(text);
       }
     }
   },
@@ -418,6 +427,9 @@ export default {
 </script>
 
 <style lang="less">
+.el-input-group--prepend .el-input__inner {
+  width: 150px;
+}
 .check-box {
   width: 90%;
   margin: 20px auto 0;

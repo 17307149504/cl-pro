@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="tableData" style="width: 100%">
+  <el-table :data="tableData" style="width: 100%" border stripe>
     <el-table-column
       v-for="item in Object.keys(tableData[0])"
       :key="item.id"
@@ -7,6 +7,13 @@
       :label="lineTitle[item]"
       min-width="120"
     >
+    </el-table-column><el-table-column
+      fixed="right"
+      label="操作"
+      width="100">
+      <template slot-scope="scope">
+        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+      </template>
     </el-table-column>
   </el-table>
 </template>
@@ -37,7 +44,8 @@ const lineTitle = {
     treat_time: "就诊时间",
     symptom: "症状",
     doctor_id: "医生",
-    disease_id: "疾病"
+    disease_id: "疾病",
+    cGrade: "初步诊断结果"
 };
 export default {
   props: {
@@ -68,6 +76,21 @@ export default {
       lineTitle,
     };
   },
+  methods: {
+    handleClick(row) {
+      console.log(row);
+      this.$router.push('./startDiagnosis');
+      this.$store.commit('changeAfterCheck', true);// 记录这里是由表格跳转到开始诊断页面，与自己点击开始诊断页面不同
+      // mounted的时候需要填好一些信息，并且默认步骤改为第二步
+      /* 通过患者的id去进行查找，得到存储的基本信息：包括：{sex: "", age: "", occupation: "", symptomStr: "",
+        cGrade: '',needChecks: [{name: "大隐静脉瓣膜功能试验",},],
+        cardNumber: null,//导入电子病历时需要提供的信息
+        name: "",
+        department: "",}
+      */
+
+    }
+  }
 };
 </script>
 
